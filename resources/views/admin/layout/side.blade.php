@@ -1,14 +1,35 @@
 <div class="flex flex-row pt-24 px-10 pb-4">
     <div class="w-2/12 mr-6">
         <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-            <a href="/home" class="inline-block text-gray-600 hover:text-black my-4 w-full">
+            @if (auth()->user()->hasRole('admin'))
+
+            <a href="/dash_admin" class="inline-block text-gray-600 hover:text-black my-4 w-full">
                 <span class="material-icons-outlined float-left pr-2">dashboard</span>
-                Home
+                Statistic
             </a>
+            @endif
+            @if (auth()->user()->hasRole('organ'))
+
+            <a href="/dash_orgnizer" class="inline-block text-gray-600 hover:text-black my-4 w-full">
+                <span class="material-icons-outlined float-left pr-2">dashboard</span>
+                Statistic
+            </a>
+            @endif
+            @if (auth()->user()->hasRole('organ'))
+
             <a href="/event" class="inline-block text-gray-600 hover:text-black my-4 w-full">
                 <span class="material-icons-outlined float-left pr-2">tune</span>
                 Events list
             </a>
+            @endif
+
+            @if (auth()->user()->hasRole('admin'))
+            <a href="/event list" class="inline-block text-gray-600 hover:text-black my-4 w-full">
+                <span class="material-icons-outlined float-left pr-2">tune</span>
+                Events list
+            </a>
+            
+            @endif
             <a>
                 <div class="group relative cursor-pointer">
 

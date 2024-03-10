@@ -24,12 +24,12 @@ class EventRequest extends FormRequest
         return [
             'title'=>'required',
             'description'=>'required',
+            'image' => 'required|image|mimes:svg,jpg,jpeg,png', 
             'cetegory_id'=>'required',
             'date'=>'required',
             'address'=>'required',
             'capacity'=>'required',
             'price'=>'required',
-            // 'statut'=>'required'
         ];
     }
     
@@ -42,6 +42,7 @@ class EventRequest extends FormRequest
             'address.required'=>'ce champ doit etrev remplit',
             'capacity.required'=>'ce champ doit etrev remplit',
             'price.required'=>'ce champ doit etrev remplit',
+            'image.image' => 'Le fichier téléchargé doit être une image.',
         ];
     }
 }

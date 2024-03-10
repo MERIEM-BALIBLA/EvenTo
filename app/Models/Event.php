@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'date', 'address', 'capacity','cetegory_id','user_id', 'status', 'price','automatic'];
+    protected $fillable = ['title', 'description', 'date', 'address', 'capacity','cetegory_id','user_id', 'status', 'price','automatic','image'];
 
     public function cetegory(){
         return $this->belongsTo(Category::class);

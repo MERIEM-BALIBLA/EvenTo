@@ -6,7 +6,8 @@
 <div class="bg-orange-100 min-h-screen">
     <div class="fixed bg-white text-blue-800 px-10 py-1 z-10 w-full">
         <div class="flex items-center justify-between py-2 text-5x1">
-            <div class="font-bold text-blue-900 text-xl">Even<span class="text-orange-600">To</span></div>
+            <a href="/page_index"><div class="font-bold text-blue-900 text-xl">Even<span class="text-orange-600">To</span></div></a>
+
             <div class="flex items-center text-gray-500">
                 <span class="material-icons-outlined p-2" style="font-size: 30px">search</span>
                 <span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>

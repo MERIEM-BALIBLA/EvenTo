@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('status', ['refused', 'pending', 'accepted'])->default('pending');
             $table->decimal('price', 8, 2)->default(20);
             $table->boolean('automatic')->default(false);
+            $table->string('image',150);
             $table->timestamps();
         });
     }

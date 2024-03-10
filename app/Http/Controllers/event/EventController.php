@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -20,7 +21,9 @@ class EventController extends Controller
 
         $events = Event::with('cetegory')
             ->where('user_id', $userId)
-            ->get();
+            ->orderByRaw("FIELD(status, 'pending', 'accepted', 'refused')")
+
+            ->paginate(8);
         $categories = Category::all();
 
         return view('pages.orgnizer.event.index', compact('events', 'categories'));
@@ -31,12 +34,13 @@ class EventController extends Controller
     {
         $user = auth()->user();
         $eventData = $request->validated();
+        $eventData['image'] = $request->file('image')->store('assets/images/events', 'public');
         $eventData['user_id'] = $user->id;
         Event::create($eventData);
 
         return redirect()->route('event');
     }
-    
+
     public function edit($id)
     {
         $event = Event::findOrFail($id)->load('cetegory'); // Charger la relation de catégorie
@@ -53,6 +57,15 @@ class EventController extends Controller
         $event->date = $request->input('date');
         $event->address = $request->input('address');
         $event->capacity = $request->input('capacity');
+        // Vérifier si une nouvelle image a été téléchargée
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($event->image) {
+                Storage::disk('public')->delete($event->image);
+            }
+            // Enregistrer la nouvelle image
+            $event->image = $request->file('image')->store('assets/images/events', 'public');
+        }
 
         $event->save();
         return redirect('event');
@@ -83,9 +96,10 @@ class EventController extends Controller
         return redirect()->back()->with('success', 'Event status updated successfully.');
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $event = Event::findOrFail($id);
-        return view('pages.event.index',compact('event'));
+        return view('pages.event.index', compact('event'));
     }
 
     public function auto(Request $request, $id)
@@ -93,15 +107,15 @@ class EventController extends Controller
         $request->validate([
             'automatic' => 'required|in:0,1',
         ]);
-    
+
         $automatic = $request->input('automatic');
-    
+
         // Mettre à jour l'état dans la base de données
         $event = Event::findOrFail($id);
         $event->automatic = $automatic; // La valeur est déjà soit true (1) soit false (0)
         $event->save();
-    
+
         return redirect()->back()->with('success', 'État de l\'événement mis à jour avec succès.');
     }
-    
+
 }

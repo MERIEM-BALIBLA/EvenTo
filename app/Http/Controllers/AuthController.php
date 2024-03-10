@@ -60,7 +60,7 @@ class AuthController extends Controller
         auth()->login($user);
     
         // Rediriger vers la page d'accueil avec un message de succès
-        return redirect('/home')->with('success', 'Registration successful');
+        return redirect('/page_index')->with('success', 'Registration successful');
     }
     
     public function Login(Request $loginRequest)
@@ -73,7 +73,7 @@ class AuthController extends Controller
             $loginRequest->session()->regenerate();
             $user = auth()->user();
             $roles = $user->roles()->pluck('name')->toArray();
-                return redirect('/home');
+                return redirect('/page_index');
         }
         return back()->withInput($loginRequest->only('email'))->with('error', 'Invalid credentials');
     }

@@ -3,10 +3,11 @@
     href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
     rel="stylesheet" />
 
+
 <div class="bg-orange-100 min-h-screen">
     <div class="fixed bg-white text-blue-800 px-10 py-1 z-10 w-full">
         <div class="flex items-center justify-between py-2 text-5x1">
-            <div class="font-bold text-blue-900 text-xl">Even<span class="text-orange-600">To</span></div>
+            <a href="/page_index"><div class="font-bold text-blue-900 text-xl">Even<span class="text-orange-600">To</span></div></a>
             <div class="flex items-center text-gray-500">
                 <span class="material-icons-outlined p-2" style="font-size: 30px">search</span>
                 <span class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>
@@ -21,9 +22,19 @@
     {{-- body --}}
     <div class="px-4 py-2 bg-white rounded-xl shadow-lg">
         <div class="text-center">
-            <h1 class="mb-2">Add a new company</h1>
+            <h1 class="mb-2">Add a new Event</h1>
         </div>
-        <form action="{{ route('Event_Store') }}" method="POST" class="text-center">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('Event_Store') }}" method="POST" class="text-center" enctype="multipart/form-data">
             @csrf
             @method('post')
             <div class="relative z-0 w-full mb-5 group">
@@ -37,8 +48,11 @@
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     type="text" name="description" placeholder="Short description about the activities"></textarea>
             </div>
-
-            {{-- <input type="hidden" name="status" value="automatic"> --}}
+            <div class="relative z-0 w-full mb-5 group">
+                <input
+                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    type="file" name="image">
+            </div>
 
             <div class="relative z-0 w-full mb-5 group">
                 <select name="cetegory_id"
@@ -53,7 +67,7 @@
             <div class="relative z-0 w-full mb-5 group">
                 <input
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    type="text" name="date" placeholder="Enter the time">
+                    type="datetime-local" name="date" placeholder="Enter the time">
             </div>
             <div class="relative z-0 w-full mb-5 group">
                 <input
@@ -63,7 +77,7 @@
             <div class="relative z-0 w-full mb-5 group">
                 <input
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    type="text" name="capacity" placeholder="Enter the capacity">
+                    type="number" name="capacity" placeholder="Enter the capacity" value="10">
             </div>
 
             <div class="relative z-0 w-full mb-5 group">
@@ -71,6 +85,8 @@
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     type="number" name="price" placeholder="Enter the price of ticket" value="50">
             </div>
+
+
 
 
             <div class="mx-auto">
@@ -81,6 +97,7 @@
                     <span class="relative text-black group-hover:text-white">Add</span>
                 </button>
             </div>
+
 
         </form>
 
@@ -118,6 +135,9 @@
                                     Content</th>
                                 <th
                                     class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                    Image</th>
+                                <th
+                                    class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                                     Category</th>
                                 <th
                                     class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
@@ -153,20 +173,23 @@
                                     </td>
 
                                     <td
-                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-normal p-4 overflow-wrap break-word">
-                                        {{ $event->description }}
+                                    class="px-6 bg-blueGray-50 text-blueGray-500 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                    {{ Illuminate\Support\Str::limit ($event->description, 30, '...') }}
                                     </td>
+
+                                    <td
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                        {{ Illuminate\Support\Str::limit($event->image, 30, '...') }}
+                                    </td>
+
                                     <td
                                         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-normal p-4 overflow-wrap break-word">
-                                        {{-- @if ($event->category) --}}
                                         {{ $event->cetegory->name }}
-                                        {{-- @else
-                                            Aucune catégorie associée
-                                        @endif --}}
                                     </td>
                                     <td
                                         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-normal p-4 overflow-wrap break-word">
-                                        {{ $event->date }}
+                                        {{-- {{ $event->date }} --}}
+                                        {{ date('Y-m-d H:i', strtotime($event->date)) }}
                                     </td>
 
                                     <td
@@ -198,23 +221,21 @@
 
                                     <td
                                         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-normal p-4 overflow-wrap break-word">
-                                        <form id="activationForm_{{ $event->id }}"
-                                            action="{{ route('auto', $event->id) }}" method="POST">
+                                        
+                                        <form id="activationForm_{{ $event->id }}" action="{{ route('auto', $event->id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <div>
-                                                <input type="hidden" name="id" value="{{ $event->id }}">
-                                                <input type="hidden" id="automatic_{{ $event->id }}"
-                                                    name="automatic" value="{{ $event->automatic }}">
-                                                <input type="checkbox" id="scales_{{ $event->id }}"
-                                                    name="scales" {{ $event->automatic == 1 ? 'checked' : '' }}
-                                                    onchange="submitForm('{{ $event->id }}')">
-                                            </div>
+                                        
+                                            {{-- <label for="automatic">Choisir l'état :</label> --}}
+                                            <select name="automatic" id="automatic_{{ $event->id }}" onchange="this.form.submit()">
+                                                <option value="0" {{ $event->automatic == 0 ? 'selected' : '' }}>Manuel</option>
+                                                <option value="1" {{ $event->automatic == 1 ? 'selected' : '' }}>Automatique</option>
+                                            </select>
                                         </form>
                                     </td>
 
                                     <td
-                                        class="flex border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-normal p-4 ">
+                                        class="flex flex-col gap-4 border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-normal p-4 ">
                                         <a href="{{ route('event_edit', ['event' => $event->id]) }}">
                                             <button id="update"
                                                 class="mr-4 group relative h-8 w-32 overflow-hidden rounded-lg text-white text-sm shadow">
@@ -235,19 +256,14 @@
                                                 </div>
                                                 <span class="relative text-black group-hover:text-white">Delete</span>
                                         </form>
-                                        <a href="">
-                                            <button
-                                                class="mr-4 group relative h-8 w-32 overflow-hidden rounded-lg text-white text-sm shadow">
-                                                <div
-                                                    class="absolute inset-0 w-2 bg-pink-700 transition-all duration-[250ms] ease-out group-hover:w-full">
-                                                </div>
-                                                <span class="relative text-black group-hover:text-white">Show</span>
-                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
+                    {{ $events->links() }}
+
                 </div>
             </div>
         </div>
